@@ -1,0 +1,414 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a simple notes keeping api",
+        "version": "1.0.0",
+        "title": "FundooNotes",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "shaktiprasadsatapathy96@gmail.com"
+        }
+    },
+    "host": "localhost:4000",
+    "basePath": "",
+    "tags": [
+        {
+            "name": "notes",
+            "description": "Operation on notes"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/register": {
+            "post": {
+                "summary": "post user resistration data to Database",
+                "description": "Record new user data",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "register",
+                        "description": "name is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Search user by email and authenticate by password",
+                "description": "authenticate registred user",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "login",
+                        "description": "email and password is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/forgotPassword": {
+            "post": {
+                "summary": "taking user email for reset password and update new password in database",
+                "description": "Reset User Password",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "forgotPassword",
+                        "description": "email is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/createNote": {
+            "post": {
+                "summary": "add new note title and content aswell in database",
+                "description": "create new note for registered user",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "createNote",
+                        "description": "title and content is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/readNote": {
+            "post": {
+                "summary": "get user note (title & content)from database",
+                "description": "Display registered users notes",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "readNote",
+                        "description": "noteid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/updateNote": {
+            "put": {
+                "summary": "update existing note title and content aswell in database",
+                "description": "update registered users note",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "updateNote",
+                        "description": "title is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/deleteNote": {
+            "delete": {
+                "summary": "user can delete specific note (title & content)from database",
+                "description": "Delete notes from DB",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "deleteNote",
+                        "description": "noteid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/search": {
+            "post": {
+                "summary": "get user for collaborate",
+                "description": "find collaborators",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "search",
+                        "description": "email is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/createCollaborator": {
+            "post": {
+                "summary": "get user the note for collaborate and user id to collaborate",
+                "description": "set a note and user for collaboration",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "createCollaborator",
+                        "description": "userid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/fileUpload": {
+            "post": {
+                "summary": "post an image and upload in aws s3 bucket",
+                "description": "image upload in s3",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "files",
+                        "name": "fileUpload",
+                        "description": "image link/ path is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/reminders": {
+            "post": {
+                "summary": "set reminder date in database",
+                "description": "setting remender",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "reminders",
+                        "description": "noteid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/notesearch": {
+            "post": {
+                "summary": "search a perticular note from database based on note id",
+                "description": "searching a particular note",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "notesearch",
+                        "description": "noteid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/archive": {
+            "post": {
+                "summary": "select a note for archive and set is archived true or false in database",
+                "description": "archive a note",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "archive",
+                        "description": "noteid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/showarchive": {
+            "post": {
+                "summary": "Show all archived notes from database",
+                "description": "show archived a note",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "showarchive",
+                        "description": "noteid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/thrash": {
+            "post": {
+                "summary": "select a note for thrash and set is thrashed true or false in database",
+                "description": "thrashing a note",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "thrash",
+                        "description": "noteid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        },
+        "/showthrash": {
+            "post": {
+                "summary": "Show all thrashed notes from database",
+                "description": "show thrashed a note",
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "showthrash",
+                        "description": "noteid is required",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "customerDetails": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "String"
+                },
+                "email": {
+                    "type": "String"
+                },
+                "password": {
+                    "type": "password"
+                }
+            },
+            "example": {
+                "name": "Shakti Prasad Satapathy",
+                "email": "shaktiprasadsatapathy96@gmail.com",
+                "password": "Abcd123"
+            }
+        }
+    }
+}
