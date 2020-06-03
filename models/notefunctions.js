@@ -214,6 +214,92 @@ class Collaborator {
         })
     }
 
+    updatePin = (noteid) => {
+        return new Promise((resolve, reject) => {
+            this.findnoteid(noteid)
+                .then(data => {
+                    if (data.length != 0) {
+                        console.log(data.length);
+                        noteModel.update({ is_pined: "true" }, { where: { noteid: noteid } })//create method of sequelize package
+                            .then(() => {
+                                resolve('done');
+                            })
+                            .catch((err) => {
+                                reject(err, 'not done');
+                            })
+                    }
+                    else {
+                        reject("Some Error found: Sorry Noteid not found")
+                    }
+                })
+                .catch((err) => {
+                    reject(err, 'not done');
+                })
+        })
+    }
+    updateUnPin = (noteid) => {
+        return new Promise((resolve, reject) => {
+            this.findnoteid(noteid)
+                .then(data => {
+                    if (data.length != 0) {
+                        console.log(data.length);
+                        noteModel.update({ is_pined: "false" }, { where: { noteid: noteid } })//create method of sequelize package
+                            .then(() => {
+                                resolve('done');
+                            })
+                            .catch((err) => {
+                                reject(err, 'not done');
+                            })
+                    }
+                    else {
+                        reject("Some Error found: Sorry Noteid not found")
+                    }
+                })
+                .catch((err) => {
+                    reject(err, 'not done');
+                })
+        })
+    }
+    updateLable = (noteid, lable) => {
+        return new Promise((resolve, reject) => {
+            this.findnoteid(noteid)
+                .then(data => {
+                    if (data.length != 0) {
+                        console.log(data.length);
+                        noteModel.update({ lable: lable }, { where: { noteid: noteid } })//create method of sequelize package
+                            .then(() => {
+                                resolve('done');
+                            })
+                            .catch((err) => {
+                                reject(err, 'not done');
+                            })
+                    }
+                    else {
+                        reject("Some Error found: Sorry Noteid not found")
+                    }
+                })
+                .catch((err) => {
+                    reject(err, 'not done');
+                })
+        })
+    }
+    showlables = (lable, userid) => {
+        return noteModel.findAll({
+            where: {
+                lable: lable,
+                userid: userid
+            }
+        })
+    }
+    
+    // findlables = (lable) => {
+    //     return noteModel.findOne({
+    //         where: {
+    //             lable: lable
+    //         }
+    //     })
+    // }
+
 }
 
 module.exports = new Collaborator()

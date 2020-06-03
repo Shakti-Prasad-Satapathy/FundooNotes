@@ -60,7 +60,7 @@ class UserServices {
                 })
                 .catch((error) => {
                     console.log("88888888888888");
-                    
+
                     reject(error)
                 })
         })
@@ -112,6 +112,16 @@ class UserServices {
         return noteFunction.updateUnTrash(noteid)
 
     }
+    setPin(noteid) {
+        return noteFunction.updatePin(noteid)
+    }
+    setUnpin(noteid) {
+        return noteFunction.updateUnPin(noteid)
+    }
+    setLable(noteid, lable) {
+        return noteFunction.updateLable(noteid, lable)
+    }
+
 
     showTrash(logintoken) {
         return new Promise((resolve, reject) => {
@@ -147,34 +157,31 @@ class UserServices {
     }
     getColor(noteid) {
         return new Promise((resolve, reject) => {
+            noteFunction.getColor(noteid)
+                .then((data) => {
+                    resolve(data.dataValues.notecolor);
+                })
+                .catch((err) => {
+                    reject(err, 'not done');
+                })
+        })
+    }
 
-            // sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-            // User.finduser(logintoken)
-            //     .then(userid => {
-            //         console.log(",,,,,,,,,,,,,,,,,,,,,,,,,", userid);
-
-                    noteFunction.getColor(noteid)
-
+    showlables(lable, logintoken) {
+        return new Promise((resolve, reject) => {
+            User.finduser(logintoken)
+                .then(userid => {
+                    noteFunction.showlables(lable, userid)
                         .then((data) => {
-
-                            // var thrashlist = []
-                            // data.filter(element => {
-                            //     // return element.dataValues.noteid,
-                            //     trashlist.push(element.dataValues.noteid)
-                            // })
-                            console.log("Success......Success......Success......",data.dataValues.notecolor);
-
-                            resolve(data.dataValues.notecolor);
-
+                            resolve(data);
                         })
                         .catch((err) => {
                             reject(err, 'not done');
                         })
-                // })
-                // .catch((errr) => {
-                //     reject(errr, 'not done');
-                // })
-
+                })
+                .catch((errr) => {
+                    reject(errr, 'not done');
+                })
         })
     }
 }

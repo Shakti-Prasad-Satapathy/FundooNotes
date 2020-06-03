@@ -209,9 +209,7 @@ class NoteFunctionController {
                     response.success = true;
                     response.data = {
                         'notes': result
-                    }
-                    // console.log("4747474747474744747474477774447",response.data);
-                    
+                    }                    
                     res.status(200).send(response);
                 })
                 .catch(err => {
@@ -273,6 +271,115 @@ class NoteFunctionController {
                 })
                 .catch(err => {
                     response.message = 'failed with showing trashed notes';
+                    console.error(response.message + err)
+                    res.status(400).send(response);
+                })
+        }
+        catch (error) {
+            console.log(response.message + error);
+            res.send(response);
+        }
+    }
+
+    pin = (req, res) => {
+        let response = {
+            'message': 'Something bad happend',
+            'success': false
+        };
+        try {
+            const noteid = req.body.noteid
+            notefunctionService.setPin(noteid)
+                .then(() => {
+                    console.log("congrats You Are Successsfully pin the note");
+                    response.message = 'Successfully note pined';
+                    response.success = true;
+                    res.status(200).send(response);
+                })
+                .catch(err => {
+                    response.message = 'Failed to pin the note';
+                    console.error(response.message + err)
+                    res.status(400).send(response);
+                })
+        }
+        catch (error) {
+            console.log(response.message + error);
+            res.send(response);
+        }
+    }
+
+    unpin = (req, res) => {
+        let response = {
+            'message': 'Something bad happend',
+            'success': false
+        };
+        try {
+            const noteid = req.body.noteid
+            notefunctionService.setUnpin(noteid)
+                .then(() => {
+                    console.log("congrats You Are Successsfully unpin the note");
+                    response.message = 'Successfully note unpined';
+                    response.success = true;
+                    res.status(200).send(response);
+                })
+                .catch(err => {
+                    response.message = 'Failed to unpin the note';
+                    console.error(response.message + err)
+                    res.status(400).send(response);
+                })
+        }
+        catch (error) {
+            console.log(response.message + error);
+            res.send(response);
+        }
+    }
+
+    addLable = (req, res) => {
+        let response = {
+            'message': 'Something bad happend',
+            'success': false
+        };
+        try {
+            const noteid = req.body.noteid
+            const lable = req.body.lable
+
+            notefunctionService.setLable(noteid, lable)
+                .then(() => {
+                    console.log("congrats You Are Successsfully add the note lable");
+                    response.message = 'Successfully note labled';
+                    response.success = true;
+                    res.status(200).send(response);
+                })
+                .catch(err => {
+                    response.message = 'Failed to add lable in note';
+                    console.error(response.message + err)
+                    res.status(400).send(response);
+                })
+        }
+        catch (error) {
+            console.log(response.message + error);
+            res.send(response);
+        }
+    }
+    getLable = (req, res) => {
+        let response = {
+            'message': 'Something bad happend',
+            'success': false
+        };
+        try {
+            const logintoken = req.body.logintoken
+            const lable = req.body.lable
+            notefunctionService.showlables(lable, logintoken)
+                .then((result) => {
+                    console.log("congrats You Are Successsfully show the note lables");
+                    response.message = 'Successfully note lable shown';
+                    response.success = true;
+                    response.data = {
+                        'notes': result
+                    }                    
+                    res.status(200).send(response);
+                })
+                .catch(err => {
+                    response.message = 'failed with showing note lables';
                     console.error(response.message + err)
                     res.status(400).send(response);
                 })

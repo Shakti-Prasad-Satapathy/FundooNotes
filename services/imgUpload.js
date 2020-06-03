@@ -14,10 +14,10 @@ class UserServices {
     // sending req as param. for further execuation of searching mechanism
     /************************************************ */
 
-    imgUpload(filename, id, file) {
+    imgUpload(filename, id, image) {
         return new Promise((resolve, reject) => {
             // aws4.upload
-            module.exports.file = file;
+            module.exports.file = image;
             img.findUser(id, User)
                 .then(data => {
                     if (data.length == 0) {

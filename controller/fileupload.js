@@ -1,7 +1,5 @@
 var imgupload = require("../services/imgUpload")
 const notifier = require('node-notifier');
-
-
 /*********************************************************** */
 // This class contains 2 controller ie. search and add collab where search will search the
 // user, to whom we want to collab and createCollaborator will add the collab users id to 
@@ -15,29 +13,27 @@ class FileUploadController {
     /************************************************ */
 
     fileUpload = (req, res) => {
+console.log(base64,"KKKKKKK");
+
         let response = {
             'message': 'Something bad happend',
             'success': false
         };
         try {
-            const id = req.body.noteid
-            const file = req.body.file
-            // const image = req.body.file
+            const id = req.body.id
+            const image = req.file
             const filename = req.body.filename
 
-            console.log(req.body, "***********", id, "**************", file);
-            //  console.log("**************///",file);
+            // console.log(filename, "***********", id, "**************",file);
+            //  console.log("*************///",req.body);
 
 
 
-            return imgupload.imgUpload(filename, id, file) // calling imgUpload() of imgUpload service
+            return imgupload.imgUpload(filename, id, image) // calling imgUpload() of imgUpload service
                 .then((result) => {
                     console.log("congrats You Are Successsfully upload the image");
                     response.message = 'Successfully image uploaded';
                     response.success = true;
-                    
-                    // console.log("4747474747474744747474477774447",response.data);
-
                     res.status(200).send(response);
                 })
                 .catch(err => {

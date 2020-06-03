@@ -31,6 +31,7 @@ router.post('/createCollaborator', collaboration.createCollaborator );
 
 /**************************** File Uplode in AWS S3 *******************************/
 router.post('/fileUpload', upload.single('image'), fileUpLoad.fileUpload );
+// console.log(base64,"KKKKKKK");
 
 /************** Other Note Functlsionality**************** */
 router.post('/reminders', noteFunctions.reminders );
@@ -42,9 +43,14 @@ router.post('/trash', noteFunctions.trash );
 router.post('/untrash', noteFunctions.untrash );
 router.post('/showtrash', noteFunctions.showtrash );
 
+router.post('/pin', noteFunctions.pin );
+router.post('/unpin', noteFunctions.unpin );
+
 router.post('/addnotecolor', noteFunctions.addnotecolor );
 router.post('/getnotecolor', noteFunctions.getnotecolor );
 
+router.post('/addlable', noteFunctions.addLable );
+router.post('/getlable', noteFunctions.getLable );
 
 
 

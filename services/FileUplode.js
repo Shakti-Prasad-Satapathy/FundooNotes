@@ -13,8 +13,34 @@ aws.config.update({
     region: 'ap-south-1'
 });
 
+
 var app = express(),
     s3 = new aws.S3();
+
+
+
+// var params = { Bucket: "BUCKET_NAME", Key: "OBJECT_KEY" };
+// s3.getObject(params, function (err, data) {
+//     if (err) {
+//         console.error(err.code, "-", err.message);
+//         return callback(err);
+//     }
+//     fs.writeFile('/tmp/filename', data.Body, function (err) {
+//         if (err)
+//             console.log(err.code, "-", err.message);
+//         return callback(err);
+//     });
+// });
+var params = { Bucket: 'fundoonotenodejs', Key: 'err.png' };
+s3.getObject(params, function (err, data) {
+    if (err)
+        return err;
+    let buf = Buffer.from(data.Body);
+    let base64 = buf.toString('base64');
+    // console.log(buf);
+    return base64
+});
+
 
 app.use(bodyParser.json());
 // let file = imgserv.file;

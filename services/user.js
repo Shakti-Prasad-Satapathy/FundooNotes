@@ -76,6 +76,8 @@ class UserServices {
     return new Promise((resolve, reject) => {
       User.findEmail(email) //to check whethere that email is registred or not
         .then(user => {
+          console.log("kkkkkkkkkkk",user.dataValues.email);
+          const usermail = user.dataValues.email
           if (bcrypt.compareSync(password, user.password)) {
             const x = {
               email: user.dataValues.email
@@ -84,7 +86,7 @@ class UserServices {
                         
             User.logintoken(logintoken, email)
             .then(() => {
-              resolve(logintoken)
+              resolve([logintoken, usermail])
             })
             .catch(error => {
               reject(error)

@@ -53,8 +53,15 @@ var noteModel = db.sequelize.define(
         noteimg: {
             type: Sequelize.STRING,
             defaultValue: null
-        }
-        
+        },
+        is_pined: {
+            type: Sequelize.STRING,
+            defaultValue: 'false'
+        },
+        lable: {
+            type: Sequelize.STRING,
+            defaultValue: null
+        },
     },
     {
         timestamps: false

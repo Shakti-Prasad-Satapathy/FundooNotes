@@ -9,6 +9,17 @@ var session = require('express-session');
 const cors = require('cors')
 
 
+
+// *******************************************************************************
+// var multer = require('multer');
+// var upload = multer();
+
+// app.use(upload.array()); 
+// app.use(express.static('public'));
+// **************************************************************************************
+
+
+
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger/swagger.json');
 
@@ -25,8 +36,10 @@ app.use(cors({
 }))
 app.use(flash());
 // app.use(flash());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.json({limit: '50mb'}));
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
 app.use(router);
 /* route to handle login and registration */
 

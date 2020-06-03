@@ -116,11 +116,12 @@ class UsersController {
         console.log(email, "******************", password);
         userService.userlogin(email, password)  //calling login service
           .then(result => {
-            console.log("congrats You Are Successsfully loggedin");
+            console.log("congrats You Are Successsfully loggedin",result);
             response.message = 'Successfully Logged In';
             response.success = true;
             response.data = {
-              'token': result
+              'token': result[0],
+              "email": result[1]
             }
             res.status(200).send(response);
           }).catch(err => {
