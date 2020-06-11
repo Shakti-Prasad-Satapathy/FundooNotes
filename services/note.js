@@ -2,8 +2,6 @@ const Note = require("../models/note");
 const Noteobj = new Note.NoteOperetions();
 const User = require("../models/user")
 
-
-
 /**************************************************************** */
 //  This class contains create, update, delete and read operetion services on notes
 /**************************************************************** */
@@ -18,22 +16,12 @@ class UserServices {
     //
     /***************************************************** */
 
-
     createNote(noteData) {
-        console.log("***********************************************", noteData.logintoken);
-
         return new Promise((resolve, reject) => {
-            User.finduser(noteData.logintoken)
+            User.finduser(noteData.logintoken)  // calling finduser() of note model to get user id by passing noteData and login token as param.
                 .then(userid => {
-                    // console.log("////////////////*********",userid);
-
                     noteData['userid'] = userid;
-                    console.log("////////////////*********///////////", noteData);
-
-
-
-                    Noteobj.createNote(noteData, userid)// function calling from notes model to create new note
-
+                    Noteobj.createNote(noteData, userid)    // function calling from notes model to create new note by passing noteData and userId as param.
                         .then(note => {
                             resolve(note)
                         })
@@ -44,7 +32,6 @@ class UserServices {
                 .catch(err => {
                     reject('Sorry unable Find user: ' + err)
                 })
-
         })
     }
 
@@ -58,27 +45,14 @@ class UserServices {
 
     readAllNote(logintoken) {
         return new Promise((resolve, reject) => {
-            console.log("////////////////*********///////////", logintoken);
-
-            User.finduser(logintoken)
+            User.finduser(logintoken)   // calling finduser() of note model to get user id by passing login token as param.
                 .then(userid => {
-                    // console.log("////////////////*********",userid);
-
-                    // noteData['userid'] = userid;
-                    console.log("////////////////*********///////////", userid);
-
-
-
-                    Noteobj.findAllNote(userid)    // function calling from notes model to find all notes of a particular user
-
+                    Noteobj.findAllNote(userid)    // function calling from notes model to find all notes of a particular user by taking userid as param
                         .then(data => {
-                            resolve(data)
-                            // console.log("ppppppppppppppppppppppp");
-                            
+                            resolve(data)                            
                         })
                         .catch(err => {
                             reject('error: ' + err)
-                            console.log("============================", err);
                         })
                 })
                 .catch(errr => {
@@ -95,15 +69,12 @@ class UserServices {
     /***************************************************** */
     updateNotes(noteid, editkey) {
         return new Promise((resolve, reject) => {
-            Noteobj.UpdateNote( noteid, editkey) // function calling from notes model to update something in notes
+            Noteobj.UpdateNote( noteid, editkey) // function calling from notes model to update note content in notes by taking noteid and editkey as param
                 .then((data) => {
                     resolve(data)
-
                 })
                 .catch((error) => {
                     reject(error)
-                    console.log("hjbgzdfgkjbhkjh")
-
                 })
         })
     }
@@ -116,16 +87,14 @@ class UserServices {
     /***************************************************** */
     deleteNote(noteid) {
         return new Promise((resolve, reject) => {
-            Noteobj.DeleteNote(noteid)  // function calling from notes model to delete a particular note
+            Noteobj.DeleteNote(noteid)  // function calling from notes model to delete a particular note by taking note id as param.
                 .then(data => {
                     resolve("unable to update", data)
                 })
                 .catch(err => {
                     reject('error: ' + err)
-                    console.log("=============***===============", err);
                 })
         })
-
     }
 }
 

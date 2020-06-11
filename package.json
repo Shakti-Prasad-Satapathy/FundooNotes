@@ -40,6 +40,8 @@
     "reload": "^3.0.4",
     "sequelize": "^5.21.5",
     "swagger-jsdoc": "^4.0.0",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "tracer": "^1.1.2",
+    "winston": "^3.2.1"
   }
 }

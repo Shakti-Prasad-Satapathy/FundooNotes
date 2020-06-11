@@ -7,7 +7,8 @@ const router=require('./routers/routes')
 const flash = require('connect-flash');
 var session = require('express-session');
 const cors = require('cors')
-
+const logger = require("./config/logger")
+// var logger = require('tracer').console();
 
 
 // *******************************************************************************
@@ -47,10 +48,10 @@ app.use(router);
 var port = process.env.PORT || 4000
 reload(app).then(() => {
     app.listen(port, function () {
-        console.log('Web server listening on port ' + 4000)
+        logger.info('Web server listening on port ' + 4000)
     })
 }).catch(function (err) {
-    console.error('Reload could not start, could not start server/sample app', err)
+    logger.error('Reload could not start, could not start server/sample app', err)
 })
 
 

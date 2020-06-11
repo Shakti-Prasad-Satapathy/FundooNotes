@@ -1,6 +1,7 @@
 const async = require("async")
 const userService = require("../services/user")
 const { validationResult } = require('express-validator');
+const logger = require("../config/logger")
 
 
 class UsersController {
@@ -15,66 +16,58 @@ class UsersController {
     };
     let message = ""
     try {
-      const today = new Date();
-
+      const today = new Date(); // getting current date
+      // checking user inputed name is perfect or not
       if (typeof req.body.name === 'undefined') {
         message = "name is mendetory"
-        console.log(message);
+        logger.warn(message);
         throw new Error('undefined name')
-
       }
+      //checking user inputed email is perfect or not
       if (typeof req.body.email === 'undefined') {
         message = "email is mendetory"
-        console.log('undefined email');
+        logger.warn('undefined email');
         throw new Error('undefined email')
-
       }
+      // checking user inputed password is perfect or not
       if (typeof req.body.password === 'undefined') {
         message = "password is mendetory"
-        console.log('undefined password');
+        logger.warn('undefined password');
         throw new Error('undefined password')
-
       }
 
       const errors = validationResult(req)
-      // if (!errors.isEmpty()) {
-      //   return res.status(422).json({ errors: errors.array() })
-      // }
+
       const userData = {
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        created_at: today,
-        updated_at: today,
+        name: req.body.name,  // getting user name for registration
+        email: req.body.email,  // getting user email for registration
+        password: req.body.password,  // getting user password for registration
+        created_at: today,  // getting currante date for set registration date
+        updated_at: today,  // getting currante date for set updating user details date
 
       }
-
-
-
-      // var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-      // var mail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-
+      // validating that field should not be empty
       if (!errors.isEmpty()) {
         // console.log("regex working");
-        const headers = req.body.headers
-        const email = req.body.email
+        const headers = req.body.headers  // sending the header by req.
+        const email = req.body.email  // getting email address from the user for registration
 
         userService.registeretion(headers, email, userData) //calling registration service
           .then(() => {
-            console.log("congrats You Are Successsfully registered");
+            logger.info("congrats You Are Successsfully registered");
             response.message = 'Successfully registered';
             response.success = true;
             res.status(200).send(response);
 
           }).catch(err => {
             response.message = 'registration failed. Enter the correct credentials';
-            console.error(response.message + err)
+            logger.error(response.message + err)
             res.status(400).send(response);
           })
       }
       else {
         res.send('Sorry Registration failed please Enter a valid password or email')
-        console.log("Sorry Registration failed please Enter a valid password or email");
+        logger.error("Sorry Registration failed please Enter a valid password or email");
         response.message = "Prease Enter valid Credentials"
         res.status(400).send(response);
       }
@@ -84,7 +77,7 @@ class UsersController {
       if (message != "") {
         response.message = message
       }
-      console.log(response.message + error);
+      logger.error(response.message + error);
       res.send(response);
     }
   }
@@ -99,24 +92,24 @@ class UsersController {
       'success': false
     };
     try {
+      // checking whethere the inputed email is perfect or not
       if (typeof req.body.email === 'undefined') {
-        console.log('undefined email');
+        logger.warn('undefined email');
         throw new Error('undefined email')
 
       }
+      // checking whether the user input is  perfect password or not
       if (typeof req.body.password === 'undefined') {
-        console.log('undefined password');
+        logger.warn('undefined password');
         throw new Error('undefined password')
-
       }
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
-        const email = req.body.email
-        const password = req.body.password
-        console.log(email, "******************", password);
+        const email = req.body.email  // getting email id to compire it with resistered user email for authenticate
+        const password = req.body.password  // getting password to compire it with resistered user password for authenticate
         userService.userlogin(email, password)  //calling login service
           .then(result => {
-            console.log("congrats You Are Successsfully loggedin",result);
+            logger.info("congrats You Are Successsfully loggedin", result);
             response.message = 'Successfully Logged In';
             response.success = true;
             response.data = {
@@ -126,18 +119,18 @@ class UsersController {
             res.status(200).send(response);
           }).catch(err => {
             response.message = 'Login failed. Enter the correct credentials';
-            console.error(response.message + err)
+            logger.error(response.message + err)
             res.status(400).send(response);
           })
       }
-      else{
-        console.log("You have Entered wrong credentials please try again");
+      else {
+        logger.error("You have Entered wrong credentials please try again");
         response.message = "Please Enter Valid Credentials and try again"
         res.status(400).send(response);
       }
     }
     catch (error) {
-      console.log(response.message + error);
+      logger.error(response.message + error);
       res.send(response);
     }
   }
@@ -158,23 +151,17 @@ class UsersController {
       'message': 'Something bad happend',
       'success': false
     };
-
     try {
-
-
-      const email = req.body.email
+      const email = req.body.email  // getting the users email id to authenticate the requesting user
       const headers = req.body.headers //"http//:localhost:4000" //req.headers.host
-
+      // checking the user inputed email address is  perfect or not
       if (typeof req.body.email === 'undefined') {
-        console.log('undefined email');
+        logger.warn('undefined email');
         throw new Error('undefined email')
-
       }
-
       userService.recoverPassword(email, async, headers)   //calling registration service 
         .then(() => {
-
-          console.log("congrats You Are Successsfully reset password  link sent via gmail");
+          logger.info("congrats You Are Successsfully reset password  link sent via gmail");
           response.message = 'Successfully Sent';
           response.success = true;
           res.status(200).send(response);
@@ -182,13 +169,13 @@ class UsersController {
         })
         .catch(err => {
           response.message = 'reseting password failed Enter the correct credentials';
-          console.error(response.message + err)
+          logger.error(response.message + err)
           res.status(400).send(response)
         })
     }
 
     catch (error) {
-      console.log(response.message + error);
+      logger.error(response.message + error);
       res.send(response);
     }
 

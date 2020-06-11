@@ -20,7 +20,7 @@ class Collaborator {
     findAllUser = (email) => {
         return new Promise((resolve, reject) => {
 
-            userModel.userModel.findOne({ // findAll() of sequelize to find all matches
+            userModel.userModel.findOne({ // findAll() of sequelize to find email is present in db or not
                 where: {
                     email: email
                     // email: {
@@ -30,15 +30,18 @@ class Collaborator {
                 }
             })
                 .then((data) => {
-                    console.log(data.id, "/*************/*/*//*/*/*//*/*/*/*/*/*/");
                     resolve(data.id)
                 })
                 .catch((err) => {
-                    console.log("//*/*//*/*/*//*/*/*/*/*/*/");
                     reject(err)
                 })
         })
     }
+
+    /* ***************************************************** */
+    // Description:This function calling from collab services. This contains findAll() 
+    // of sequelize to find all exact user id based on user input by passing req as param
+    /***************************************************** */
     finduserid = (userid) => {
         return noteModel.noteModel.findAll({ // findAll() of sequelize to find all matches
             where: {
@@ -46,6 +49,11 @@ class Collaborator {
             }
         })
     }
+
+    /* ***************************************************** */
+    // Description:This function calling from collab services. This contains findAll() 
+    // of sequelize to find all exact note id based on user input by passing req as param
+    /***************************************************** */
     findnoteid = (noteid) => {
         return noteModel.noteModel.findAll({ // findAll() of sequelize to find all matches
             where: {

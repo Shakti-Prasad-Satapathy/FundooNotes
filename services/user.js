@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const randomBytes = require('randombytes');
 const mailer = require("../services/node_mailer")
 const jwstoken = require("../auth/auth")
+const logger = require("../config/logger")
 
 const User = require("../models/user")
 process.env.SECRET_KEY = "secret"
@@ -16,34 +17,29 @@ class UserServices {
 
   /************************************************************ */
   //
-  // Description:This function calling from users controller, and calling findEmail() of 
-  // model/user.js by passing req param. then using promise creating an encripted
-  // password and then calling createUser() of model/user.js by passing userdata as 
-  // argument, then resolve and reject the result
+  // Description:This function calling from users controller, and calling findEmail() of user model by
+  // passing email as param then using promise creating an encripted password and then calling createUser()
+  // of model/user.js by passing userdata as argument then resolve and reject the result
   //
   /***************************************************** */
 
 
   registeretion(headers, email, userData) {
     return new Promise((resolve, reject) => {
-
       var flag = "verifyuser"
       User.findEmail(email)  //to check entered email address is alredy registered or new
         .then(user => {
-
-          if (user == null) {
+          if (user == null) { // condetion for checking if the email is authenticated or not if yes then  go for further process
             const hash = bcrypt.hashSync(userData.password, 10)// Hashing in password
             userData.password = hash
 
-            User.createUser(userData)// function to create new user
+            User.createUser(userData)// function to create new user by sending userData sa param
               .then(data => {
 
                 if (data) {
-
                   let token = jwstoken.jsonToken(data.dataValues) // generating jwt
-                  mailer.mailer(token, email, headers, flag)
+                  mailer.mailer(token, email, headers, flag)  // calling node mailer to send email for successfully registration
                   resolve("Successfull......")
-
                 }
                 else {
                   reject("Sorry Unable to register")
@@ -65,9 +61,9 @@ class UserServices {
 
   /************************************************************ */
   //
-  // Description:This function calling from users controller, and calling findEmail() of 
-  // model/user.js by passing req param. then using promise creating an jwt and resolve it
-  // for sending it as a responce
+  // Description:This function calling from users controller, and calling findEmail() of user model by
+  // passing email as param. then using promise creating an jwt for futrher authentication processes
+  // resolve it for sending it as a responce
   //
   /***************************************************** */
 
@@ -76,7 +72,6 @@ class UserServices {
     return new Promise((resolve, reject) => {
       User.findEmail(email) //to check whethere that email is registred or not
         .then(user => {
-          console.log("kkkkkkkkkkk",user.dataValues.email);
           const usermail = user.dataValues.email
           if (bcrypt.compareSync(password, user.password)) {
             const x = {
@@ -84,14 +79,13 @@ class UserServices {
             }
             var logintoken = (jwstoken.jsonToken(x))
                         
-            User.logintoken(logintoken, email)
+            User.logintoken(logintoken, email)  // this will generate a token for further authentications
             .then(() => {
               resolve([logintoken, usermail])
             })
             .catch(error => {
               reject(error)
             })
-            
           }
           else {
             reject({ error: "USER ALREADY EXISTS" })
@@ -117,7 +111,7 @@ class UserServices {
 
     return new Promise((resolve, reject) => {
       var flag = "forgotpassword"
-      async.waterfall([
+      async.waterfall([   // using async.waterfall() executing multiple function mentioned billow in seerise
         function (done) {
           var random = randomBytes(32)
           var random = random.toString('hex')
@@ -128,18 +122,13 @@ class UserServices {
         },
 
         function (token) {
-          User.findEmail(email) //to check whethere that email is registred or not
-          // console.log("[[[[[[[[[[[[[[[[[[[[[", User);
-          
+          User.findEmail(email) //to check whethere that email is registred or not          
             .then(user => {
-
               if (user != null) {
-                
                 User.updateUsers(token, email)  // update users table with the token generated for password recover
                   .then(() => {
                     mailer.mailer(token, email, headers, flag)  // calling the mailler service to send the reset password link via email
                   }).catch(err => {
-                    console.log(err);
                     reject(err)
                   })
               }
@@ -147,22 +136,16 @@ class UserServices {
                 reject("unable to update your new password")
               }
             }).catch(error => {
-              console.log("Sorry Email not found", error);
               reject("Sorry Email not found", error)
             })
-
         },
       ], function (err) {
         if (err) {
-          console.log("ERROR IN NODE MAILER", err);
+          logger.error("ERROR IN NODE MAILER", err);
         }
-        // res.redirect('/forgot');
       });
     })
-
   };
-
-
 }
 
 module.exports = new UserServices()

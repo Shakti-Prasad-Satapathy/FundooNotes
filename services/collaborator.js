@@ -17,27 +17,11 @@ class UserServices {
 
     search(email) {
         return new Promise((resolve, reject) => {
-            Collab.findAllUser(email)
+            Collab.findAllUser(email)   //calling findAllUser() of collab model to search requested email
                 .then(data => {
-                    console.log("7777777777777777",data);
-                    
                     resolve(data)
-
-                    // if (data.length == 0) {
-                    //     console.log(" data not found");
-                    //     reject('data not found.....................: ')
-                    // }
-                    // else {
-                    //     // data.filter(element => {
-                    //     //         colabarr.push(element.dataValues.email)
-                    //     // })
-                    //     resolve(data)
-                    //     // console.log("=====================inside then---------------------", colabarr)
-                    // }
                 })
                 .catch(err => {
-                    console.log("7777777777777777888888888");
-
                     reject('email not found: ' + err)
                 })
         })
@@ -49,10 +33,8 @@ class UserServices {
     // result to the controller if any data found
     /************************************************ */
 
-    createCollaborator(userid, noteid) {
-        console.log("//////////..........",userid, noteid);
-        
-        return Collab.createCollaborator(userid, noteid)
+    createCollaborator(userid, noteid) {        
+        return Collab.createCollaborator(userid, noteid)    //calling createCollaborator()of collab model to add the requested email for collaboretion
     }
 }
 

@@ -1,7 +1,7 @@
 var Note = require("../models/note")
 const { validationResult } = require('express-validator');
 const noteService = require("../services/note")
-
+const logger = require("../config/logger")
 
 class NoteController {
   /********************createNote ******************** */
@@ -15,48 +15,40 @@ class NoteController {
     };
     try {
       const errors = validationResult(req)
-
       const today = new Date();
-      // var x = localStorage.getItem('token');
-      // console.log("55555555555555555555555555555555555",x);
-      
       const noteData = {
-        logintoken: req.body.logintoken,
-        // userid: req.body.userid,
-        title: req.body.title,
-        content: req.body.content,
+        logintoken: req.body.logintoken,  // getting login token to create note for the particular user
+        title: req.body.title,  // getting title to add title for the note
+        content: req.body.content,  // getting content to add title for the note
         created_at: today,
         updated_at: null,
       }
-      if (!errors.isEmpty()) {
+      if (!errors.isEmpty()) {  // checking the validation for further execuation
 
       noteService.createNote(noteData)  // calling createNote of notes service
         .then(() => {
-          console.log("congrats You Are Successsfully created the note");
+          logger.info("congrats You Are Successsfully created the note");
           response.message = 'Successfully note created';
           response.success = true;
           res.status(200).send(response);
         })
         .catch(err => {
           response.message = 'note creation failed. ';
-          console.error(response.message + err)
+          logger.error(response.message + err)
           res.status(400).send(response);
         })
       }
       else{
-        console.log("title and contrnt field shouldnot be empty");
+        logger.error("title and contrnt field shouldnot be empty");
         response.message = "Title and Content should not be empty"
         res.status(400).send(response);
-        // res.send('title and contrnt field shouldnot be empty')
       }
     }
     catch (error) {
-      console.log(response.message + error);
+      logger.error(response.message + error);
       res.send(response);
     }
-
   }
-
 
   /************************************Read AllNotes ************************************ */
   //  Description:  This controll will call readAllNote() with req as param from notes
@@ -68,12 +60,10 @@ class NoteController {
       'success': false
     };
     try {
-      const logintoken = req.body.logintoken
-      // console.log("111111111111111111111111111111111",logintoken);
-      
+      const logintoken = req.body.logintoken  // getting login token to read all notes for the particular user    
       noteService.readAllNote(logintoken)  // calling readAllNote of noteservices
         .then((data) => {
-          console.log("congrats You Are Successsfully read all note");
+          logger.info("congrats You Are Successsfully read all note......");
           response.message = 'Successfully read all notes';
           response.success = true;
           response.data = {
@@ -83,15 +73,14 @@ class NoteController {
         })
         .catch(err => {
           response.message = 'viewing notes failed. Some issue in reading notes';
-          console.error(response.message + err)
+          logger.error(response.message + err)
           res.status(400).send(response);
         })
     }
     catch (error) {
-      console.log(response.message + error);
+      logger.error(response.message + error);
       res.send(response);
     }
-
   }
 
   /************************************update note content ************************************ */
@@ -105,26 +94,25 @@ class NoteController {
     };
     try {
       var editkey = {
-        content: req.body.content //setting a key for user update
+        content: req.body.content //setting a key for user update /getting updated content
       }
-      // const userid = req.body.userid
-      const noteid = req.body.noteid
+      const noteid = req.body.noteid  // getting note id for for update the particular selected note
       editkey = editkey.content
       noteService.updateNotes(noteid, editkey)  // calling readAllNote of noteservices
         .then(() => {
-          console.log("congrats You Are Successsfully updated the note");
+          logger.info("congrats You Are Successsfully updated the note");
           response.message = 'Successfully updated';
           response.success = true;
           res.status(200).send(response);
         })
         .catch(err => {
           response.message = 'updetion failed. There is some issue in updating the note';
-          console.error(response.message + err)
+          logger.error(response.message + err)
           res.status(400).send(response);
         })
     }
     catch (error) {
-      console.log(response.message + error);
+      logger.error(response.message + error);
       res.send(response);
     }
   }
@@ -138,22 +126,22 @@ class NoteController {
       'success': false
     };
     try {
-      const noteid = req.body.noteid
+      const noteid = req.body.noteid  // getting note id to exicute deletion for the particular note
       noteService.deleteNote(noteid)   // calling deleteNote of noteservices
         .then(() => {
-          console.log("congrats You Are Successsfully deleted the note");
+          logger.info("congrats You Are Successsfully deleted the note");
           response.message = 'Successfully deleted';
           response.success = true;
           res.status(200).send(response);
         })
         .catch(err => {
           response.message = 'deletion failed. Some issue in deleting the note';
-          console.error(response.message + err)
+          logger.error(response.message + err)
           res.status(400).send(response);
         })
     }
     catch (error) {
-      console.log(response.message + error);
+      logger.error(response.message + error);
       res.send(response);
     }
   }

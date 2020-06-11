@@ -92,20 +92,24 @@ class NoteOperetions {
     }
 
     /***************************************************** */
-    // Description:This function calling from users services. This contains findOne() 
-    // of sequelize to find all exact note based on user input by passing req as param
+    // Description:This function calling from users services. This contains findAll() 
+    // of sequelize to check all notes based on user input by passing req as param
     /***************************************************** */
 
     findAllNote = (userid) => {
-
         return noteModel.findAll({
             where: {
                 userid: userid, //checking if the userid sent by client is present in the db(valid)
                 is_trashed: 'false'
-
             }
         })
     }
+
+    /***************************************************** */
+    // Description:This function calling from users services. This contains findAll() 
+    // of sequelize to find user id is present or not based on user input by passing req as param
+    /***************************************************** */
+
     finduserid = (userid) => {
         return noteModel.findAll({ // findAll() of sequelize to find all matches
             where: {
@@ -113,6 +117,12 @@ class NoteOperetions {
             }
         })
     }
+
+    /***************************************************** */
+    // Description:This function calling from users services. This contains findAll() 
+    // of sequelize to find note id is present or not based on user input by passing req as param
+    /***************************************************** */
+
     findnoteid = (noteid) => {
         return noteModel.findAll({ // findAll() of sequelize to find all matches
             where: {
@@ -126,18 +136,12 @@ class NoteOperetions {
     // sequelize to create the note based on input data by passing noteData as param
     /***************************************************** */
     createNote = (noteData, userid) => {
-        // console.log("***************************************************", noteData);
         return new Promise((resolve, reject) => {
-
             noteModel.create(noteData, userid)//create method of sequelize package to create new record
                 .then(user => {
-                    console.log("**********");
-
                     resolve(user)
                 })
                 .catch(err => {
-                    console.log("********************", err);
-
                     reject(err)
                 })
         })
@@ -151,16 +155,12 @@ class NoteOperetions {
     UpdateNote = (noteid, editkey) => {
         return new Promise((resolve, reject) => {
             noteModel.update({ content: editkey }, { where: { noteid: noteid } })
-            // noteModel.update({ content: editkey, updated_at: Date() }, { where: { [Op.and]: [{ noteid: noteid }] } })
-
                 .then((data) => {
-                    console.log("dddddddddddddddddddd", noteid, editkey);
                     resolve("success......fl")
                 })
                 .catch(err => {
                     reject("Error in updating note", err)
                 })
-
         })
     }
 
@@ -178,16 +178,14 @@ class NoteOperetions {
                             where: { noteid: noteid }  // Setting condetion to finding the exact match
                         })
                             .then(result => {
-                                console.log(result, "==");
-
-                                resolve("result***", result)
+                                resolve(result)
                             })
                             .catch(error => {
-                                reject("Sorry Some issue come in deleting the note", error)
+                                reject(error)
                             })
                     }
                     else {
-                        reject("Sorry Some issue come in deleting the note", data)
+                        reject("Sorry Some issue come in deleting the note")
                     }
                 })
                 .catch(err => {

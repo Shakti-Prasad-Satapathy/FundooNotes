@@ -57,36 +57,30 @@ module.exports.userModel = db.sequelize.define(
 // to find the exact email based on user input
 /***************************************************** */
 module.exports.findEmail = (email) => {
-  // console.log(email,"=====================*****");
-
   return this.userModel.findOne({//findOne method of sequelize package
-
     where: {
       email: email//checking if the email address sent by client is present in the db(valid)
     }
-
   })
 }
+
+
+/***************************************************** */
+// Description:This function calling from users services. This contains findOne() of sequelize
+// to find the user basedon login token which is generated during user login 
+/***************************************************** */
+
 module.exports.finduser = (logintoken) => {
-
-  console.log(logintoken,"=====================*****");
   return new Promise((resolve, reject) => {
-
     this.userModel.findOne({//findOne method of sequelize package
-
       where: {
         logintoken: logintoken//checking if the email address sent by client is present in the db(valid)
       }
-
     })
       .then((data) => {
-        // console.log(data, "/*************/*/*//*/*/*//*/*/*/*/*/*/");
-        console.log(data.dataValues.id, "/*************/*/*//*/*/*//*/*/*/*/*/*/");
-
         resolve(data.dataValues.id)
       })
       .catch((err) => {
-        console.log("//*/*//*/*/*//*/*/*/*/*/*/");
         reject(err)
       })
   })
@@ -98,13 +92,17 @@ module.exports.finduser = (logintoken) => {
 /***************************************************** */
 
 module.exports.updateUsers = (token, email) => {
-  // console.log(email,token,"=====================xxxx");
+  //update method of sequelize package
   return this.userModel.update({ resetPasswordToken: token, resetPasswordExpires: Date() }, { where: { email: email } })
 }
 
+/***************************************************** */
+// Description:This function calling from users services. This contains update() of sequelize
+// to update the login token in users table which is generated after a user logging in
+/***************************************************** */
 
 module.exports.logintoken = (logintoken, email) => {
-  console.log(logintoken, "=====================xxxx");
+  //update method of sequelize package
   return this.userModel.update({ logintoken: logintoken }, { where: { email: email } })
 }
 
@@ -116,7 +114,6 @@ module.exports.logintoken = (logintoken, email) => {
 
 module.exports.createUser = (userData) => {
   return new Promise((resolve, reject) => {
-
     this.userModel.create(userData) //create method of sequelize package
       .then(user => {
         resolve(user)

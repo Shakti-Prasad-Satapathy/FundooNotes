@@ -1,4 +1,5 @@
 const colabService = require("../services/collaborator")
+const logger = require("../config/logger")
 
 /*********************************************************** */
 // This class contains 2 controller ie. search and add collab where search will search the
@@ -16,15 +17,16 @@ class CollabController {
             'success': false
         };
         try {
-            if (typeof req.body.email === 'undefined') {
-                console.log('undefined email');
+            //checking entered email is valid or not
+            if (typeof req.body.email === 'undefined') {    
+                logger.warn('undefined email');
                 throw new Error('undefined email')
 
             }
             const email = req.body.email
             colabService.search(email)    // calling search() of collabservices
                 .then((data) => {
-                    console.log("Search Result Found");
+                    logger.info("Search Result Found");
                     response.message = 'result found';
                     response.success = true;
                     response.data = {
@@ -34,17 +36,17 @@ class CollabController {
                 })
                 .catch(err => {
                     response.message = 'No result found, there is no such email registered';
-                    console.error(response.message + err)
+                    logger.error(response.message + err)
                     res.status(400).send(response)
                 })
         }
         catch (error) {
-            console.log(response.message + error);
+            logger.error(response.message + error);
             res.send(response);
         }
     }
 
-    /********************search ******************** */
+    /********************createCollaborator ******************** */
     // Description: This function will call the createCollaborator() of collab services
     // by sending req as param. for further execuation of adding collab user mechanism
     /************************************************ */
@@ -57,22 +59,21 @@ class CollabController {
         try {
             const userid = req.body.userid
             const noteid = req.body.noteid
-            colabService.createCollaborator(userid, noteid)
+            colabService.createCollaborator(userid, noteid)     // calling createCollaborator() to set the collaborater user
                 .then(() => {
-                    console.log("congrats You Are Successsfully set Collaborator");
+                    logger.info("congrats You Are Successsfully set Collaborator");
                     response.message = 'collaborator set';
-                    response.success = true;
-                    
+                    response.success = true; 
                     res.status(200).send(response);
                 })
                 .catch(err => {
                     response.message = 'Some issu is colaboration';
-                    console.error(response.message + err)
+                    logger.error(response.message + err)
                     res.status(400).send(response)
                 })
         }
         catch (error) {
-            console.log(response.message + error);
+            logger.error(response.message + error);
             res.send(response);
         }   
     }
